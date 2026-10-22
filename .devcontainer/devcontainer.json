@@ -6,7 +6,21 @@
   "customizations": {
     "vscode": {
       "settings": {
-        "python.defaultInterpreterPath": "/usr/local/bin/python"
+        "python.defaultInterpreterPath": "/app/.venv/bin/python",
+        "ruff.enable": true,
+        "ruff.lint.enable": true,
+        "ruff.path": [
+          "/app/.venv/bin/ruff"
+        ],
+        "ruff.trace.server": "messages",
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.formatOnSave": true,
+          "editor.codeActionsOnSave": {
+            "source.fixAll.ruff": "explicit",
+            "source.organizeImports.ruff": "explicit"
+          }
+        }
       },
       "extensions": [
         "fnando.new-file",
