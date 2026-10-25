@@ -27,7 +27,9 @@ THIRD_PARTY_APPS = [
     'rest_framework',
 ]
 
-LOCAL_APPS = []  # type: ignore
+LOCAL_APPS = [
+    'common.apps.CommonConfig',
+]
 
 # Application definition
 
