@@ -1,0 +1,6 @@
+from rest_framework import routers
+
+app_name = '{{ app_name }}'
+router = routers.SimpleRouter()
+
+urlpatterns = router.urls
