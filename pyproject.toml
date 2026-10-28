@@ -31,6 +31,7 @@ package-mode = false
 
 [tool.pytest]
 DJANGO_SETTINGS_MODULE = "config.settings.test"
+python_files = ["test_*.py", "tests.py"]
 
 
 [tool.ruff]
@@ -43,6 +44,8 @@ extend-exclude = [
     "config/asgi.py",
     "config/wsgi.py",
     "manage.py",
+    # Migrations
+    "apps/*/migrations",
 ]
 
 
@@ -93,6 +96,7 @@ select = [
 ]
 ignore = [
     "A005",    # allow to shadow stdlib and builtin module names
+    'ICN001',
     "ISC001",  # implicit string concat conflicts with `ruff format`
     "ISC003",  # prefer explicit string concat over implicit concat
     "PLR09",   # we have our own complexity rules
@@ -113,8 +117,10 @@ pydocstyle.convention = "google"
 
 
 [tool.ruff.lint.per-file-ignores]
-"tests/*.py" = [
-    "S101", # asserts
+"{tests/*.py,tests.py}" = [
+    "S101",   # asserts
+    'S106',   # hardcoded password
+    "SLF001",
 ]
 
 
