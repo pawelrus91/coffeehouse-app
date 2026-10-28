@@ -29,6 +29,7 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'common.apps.CommonConfig',
+    'apps.auth.apps.AuthConfig',
 ]
 
 # Application definition
@@ -134,6 +135,7 @@ MAILERS = {
         'BACKEND': 'django.core.mail.backends.console.EmailBackend',
     },
 }
+
 
 # Django REST Framework
 # https://www.django-rest-framework.org/api-guide/settings/#api-reference
