@@ -31,7 +31,6 @@ def test_that_user_model_is_created_with_minimum_inputs():
     assert user.last_name == ''
     assert user.is_active is False
     assert user.is_staff is False
-    # assert user.is_superadmin is False
     assert isinstance(user.created_at, datetime.datetime)
     assert isinstance(user.updated_at, datetime.datetime)
     # Test for fields are from django.contrib.auth.model.PermissionsMixin
