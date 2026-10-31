@@ -118,7 +118,7 @@ pydocstyle.convention = "google"
 
 
 [tool.ruff.lint.per-file-ignores]
-"{tests/*.py,tests.py}" = [
+"{**/tests/test_*.py,tests.py}" = [
     "S101",   # asserts
     'S106',   # hardcoded password
     "SLF001",
