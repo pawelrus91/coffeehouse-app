@@ -4,7 +4,7 @@ from django.urls import reverse
 from rest_framework import status
 from rest_framework.test import APIClient
 
-from apps.auth.tests.factories import RegistrationFactory
+from apps.auth.tests.factories import RegistrationFactory, UserFactory
 
 User = get_user_model()
 
@@ -16,6 +16,15 @@ def api_client():
 
 def get_register_url():
     return reverse('auth:register')
+
+
+def get_login_url():
+    return reverse('auth:login')
+
+
+# ==================================================
+# Registration
+# ==================================================
 
 
 @pytest.mark.django_db
@@ -60,3 +69,44 @@ def test_when_email_address_exists_in_database_then_400(api_client):
     assert request.json() == {
         'email': ['user with this email address already exists.'],
     }
+
+
+# ==================================================
+# Login
+# ==================================================
+
+
+@pytest.mark.django_db
+def test_when_user_not_exists_then_return_400(api_client):
+    valid_payload = UserFactory.credentials()
+    response = api_client.post(get_login_url(), data=valid_payload)
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    assert response.json() == {
+        'error': ['Unable to log in with provided credentials.'],
+    }
+
+
+@pytest.mark.django_db
+def test_when_user_exists_and_is_not_active_then_return_400(api_client):
+    valid_payload = UserFactory.credentials()
+    UserFactory.create(**valid_payload)
+
+    response = api_client.post(get_login_url(), data=valid_payload)
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+    assert response.json() == {
+        'error': ['Unable to log in with provided credentials.'],
+    }
+
+
+@pytest.mark.django_db
+def test_when_user_exists_and_is_active_then_return_tokens(api_client):
+    valid_payload = UserFactory.credentials()
+    UserFactory.create(is_active=True, **valid_payload)
+
+    response = api_client.post(get_login_url(), data=valid_payload)
+
+    assert response.status_code == status.HTTP_200_OK
+    assert 'access' in response.json()
+    assert 'refresh' in response.json()

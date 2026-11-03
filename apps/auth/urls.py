@@ -8,6 +8,7 @@ router = routers.SimpleRouter()
 
 
 urlpatterns = [
+    path('auth/login/', views.LoginAPIView.as_view(), name='login'),
     path('auth/register/', views.RegisterAPIView.as_view(), name='register'),
     *router.urls,
 ]

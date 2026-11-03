@@ -4,8 +4,11 @@ from rest_framework import status
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+)
 
-from apps.auth.serializers import RegisterSerializer
+from apps.auth.serializers import LoginSerializer, RegisterSerializer
 
 User = get_user_model()
 
@@ -27,3 +30,7 @@ class RegisterAPIView(CreateAPIView):
     def perform_create(self, serializer):
         # TODO: remove `is_active` after implemented activation system
         serializer.save(is_active=True)
+
+
+class LoginAPIView(TokenObtainPairView):
+    serializer_class = LoginSerializer
