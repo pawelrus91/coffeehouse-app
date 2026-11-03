@@ -33,7 +33,12 @@ class UserFactory(factory.django.DjangoModelFactory[User]):
         model = User
 
     email = factory.Faker('ascii_safe_email')
-    password = factory.django.Password('secret')
+    password = factory.Faker('password')
+
+    @classmethod
+    def _create(cls, model_class, *args, **kwargs):
+        manager = cls._get_manager(model_class)
+        return manager.create_user(*args, **kwargs)
 
     @classmethod
     def credentials(cls, **kwargs: Unpack[UserCredentials]) -> UserCredentials:
