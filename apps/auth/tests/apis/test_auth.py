@@ -110,3 +110,37 @@ def test_when_user_exists_and_is_active_then_return_tokens(api_client):
     assert response.status_code == status.HTTP_200_OK
     assert 'access' in response.json()
     assert 'refresh' in response.json()
+
+
+# ==================================================
+# Me
+# ==================================================
+
+
+@pytest.mark.django_db
+def test_when_is_unauthenticated_then_return_401(api_client):
+    UserFactory.create()
+
+    response = api_client.get(reverse('auth:me'))
+
+    assert response.status_code == status.HTTP_401_UNAUTHORIZED
+
+
+@pytest.mark.django_db
+def test_when_user_has_token_credentials_then_show_user_details(api_client):
+    valid_payload = UserFactory.credentials()
+    user = UserFactory.create(is_active=True, **valid_payload)
+
+    tokens_response = api_client.post(get_login_url(), data=valid_payload)
+    api_client.credentials(HTTP_AUTHORIZATION='Bearer ' + tokens_response.data['access'])
+
+    response = api_client.get(reverse('auth:me'))
+
+    expected_response = {
+        'id': str(user.id),
+        'first_name': user.first_name,
+        'last_name': user.last_name,
+        'email': user.email,
+    }
+    assert response.status_code == status.HTTP_200_OK
+    assert response.json() == expected_response

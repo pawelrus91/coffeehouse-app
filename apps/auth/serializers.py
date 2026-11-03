@@ -38,3 +38,9 @@ class LoginSerializer(TokenObtainPairSerializer, TokenObtainSerializer):
             'error': [_('Unable to log in with provided credentials.')],  # type: ignore
         },
     }
+
+
+class MeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ('id', 'first_name', 'last_name', 'email')

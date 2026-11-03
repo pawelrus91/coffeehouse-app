@@ -1,19 +1,18 @@
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext_lazy as _
-from rest_framework import status
-from rest_framework.generics import CreateAPIView
+from rest_framework import generics, status
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
 )
 
-from apps.auth.serializers import LoginSerializer, RegisterSerializer
+from apps.auth.serializers import LoginSerializer, MeSerializer, RegisterSerializer
 
 User = get_user_model()
 
 
-class RegisterAPIView(CreateAPIView):
+class RegisterAPIView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = RegisterSerializer
 
@@ -34,3 +33,15 @@ class RegisterAPIView(CreateAPIView):
 
 class LoginAPIView(TokenObtainPairView):
     serializer_class = LoginSerializer
+
+
+class MeAPIView(generics.ListAPIView):
+    serializer_class = MeSerializer
+
+    def get_queryset(self):
+        return self.request.user
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset)
+        return Response(serializer.data)
